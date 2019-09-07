@@ -1,0 +1,25 @@
+
+$PreviousEAP = $ErrorActionPreference
+$ErrorActionPreference = 'SilentlyContinue'
+Remove-Variable -Name NewADGroupResult, NewADGroupError
+New-ADGroup `
+    -Name 'Test1' `
+    -DisplayName 'Test1' `
+    -Description 'Test1' `
+    -Path 'OU=Security Groups,OU=ViaMonstra,DC=corp,DC=viamonstra,DC=com' `
+    -GroupCategory Security `
+    -GroupScope Global `
+    -ErrorVariable NewADGroupError `
+    -OutVariable NewADGroupResult `
+    -PassThru
+$ErrorActionPreference = $PreviousEAP
+if ($NewADGroupResult) {
+    $NewADGroupResult
+    'Success'
+    $True
+}
+else {
+    $NewADGroupError
+    'Failed'
+    $False
+}
