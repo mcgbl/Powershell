@@ -1,17 +1,22 @@
+#Method1
+#This method will display any errors even if ErrorActionPreference is SilentlyContinue.
+#Use Second method if you have to hide errors
+#The "Results" variables DON'T need to be cleared before running again
+if ([bool]$(New-ADGroup -OutVariable NewADGroupResult -Name 'test1' -DisplayName 'test1' -Description 'test1' -Path 'OU=Security Groups,OU=ViaMonstra,DC=corp,DC=viamonstra,DC=com' -GroupCategory Security -GroupScope Global -ErrorVariable NewADGroupError -PassThru)) {
+    'ok'
+    $NewADGroupResult
+} else {
+    'not ok'
+    $NewADGroupError #This is redundant as the error already displays in the console but might be usefull later in the script
+}
 
+#Method2
+#This Method prevents the error displayed in the console by setting ErrorActionPreference to Continue then back to it's original value
+#also requires the "Results" variables to be cleared before running again
 $PreviousEAP = $ErrorActionPreference
 $ErrorActionPreference = 'SilentlyContinue'
 Remove-Variable -Name NewADGroupResult, NewADGroupError
-New-ADGroup `
-    -Name 'Test1' `
-    -DisplayName 'Test1' `
-    -Description 'Test1' `
-    -Path 'OU=Security Groups,OU=ViaMonstra,DC=corp,DC=viamonstra,DC=com' `
-    -GroupCategory Security `
-    -GroupScope Global `
-    -ErrorVariable NewADGroupError `
-    -OutVariable NewADGroupResult `
-    -PassThru
+New-ADGroup -OutVariable NewADGroupResult -Name 'test1' -DisplayName 'test1' -Description 'test1' -Path 'OU=Security Groups,OU=ViaMonstra,DC=corp,DC=viamonstra,DC=com' -GroupCategory Security -GroupScope Global -ErrorVariable NewADGroupError -PassThru
 $ErrorActionPreference = $PreviousEAP
 if ($NewADGroupResult) {
     $NewADGroupResult
