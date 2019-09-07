@@ -1,0 +1,6 @@
+function Test-ADGroupExists ($Name) {
+    $PreviousEAP = $ErrorActionPreference
+    $ErrorActionPreference = 'SilentlyContinue'
+    [bool]$(Get-ADGroup -Identity $Name)
+    $ErrorActionPreference = $PreviousEAP
+}
