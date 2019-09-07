@@ -1,0 +1,13 @@
+"Getting Current `$ErrorActionPreference value then setting to ""Continue"" to avoid New-CMCollection errors in console which cannot be supressed by setting EA in the cmdlet. Will set it back after the command runs." | Write-Verbose
+$PreviousEAP = $ErrorActionPreference
+$ErrorActionPreference = 'SilentlyContinue'
+"Attempting to Create new CM Collection" | Write-Verbose
+#Note: There is no need to clear the NewCMCollectionResult AND NewCMCollectionError variables with each run as the cmdlet clears it.
+New-CMCollection -OutVariable NewCMCollectionResult -Name 'Test1sdfasdffffff' -Comment 'Test1' -CollectionType Device -LimitingCollectionName 'all systems' -ErrorVariable NewCMCollectionError -ErrorAction SilentlyContinue
+if ($NewCMCollectionResult) {
+    $NewCMCollectionResult
+    'ok'
+} else {
+    $NewCMCollectionError
+    'not ok'
+}
