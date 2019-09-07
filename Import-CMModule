@@ -1,0 +1,2 @@
+Import-Module "$env:SMS_ADMIN_UI_PATH\..\configurationmanager.psd1"
+Set-Location -Path "$((Get-PSDrive | Where-Object { $_.Provider.Name -eq 'CMSite' } | Select-Object -First 1 ).Name):"
