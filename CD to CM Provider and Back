@@ -1,0 +1,5 @@
+$PrevLoc = $PWD
+"Previous Location: $PrevLoc"
+Set-Location -Path "$((Get-PSDrive | Where-Object { $_.Provider.Name -eq 'CMSite' } | Select-Object -First 1 ).Name):"
+#Do something in CM
+Set-Location $PrevLoc
