@@ -1,4 +1,4 @@
-function New-CMPackage {
+function New-VMCMPackage {
     [CmdletBinding()]
     Param (
         $Name,
@@ -23,4 +23,4 @@ function New-CMPackage {
             $NewCMPackageError
         } 
 }
-New-CMPackage -Name 'TestPackage' -Language 'En-US' -Description 'TestPackage' -Manufacturer 'ViaMonstra' -Version '123' -UNCSourcePath '\\CM01\Sources\OSD\TestPackage'
+New-VMCMPackage -Name 'TestPackage' -Language 'En-US' -Description 'TestPackage' -Manufacturer 'ViaMonstra' -Version '123' -UNCSourcePath '\\CM01\Sources\OSD\TestPackage'
