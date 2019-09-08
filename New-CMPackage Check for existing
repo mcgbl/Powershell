@@ -1,0 +1,26 @@
+function New-CMPackage {
+    [CmdletBinding()]
+    Param (
+        $Name,
+        $Description,
+        $Manufacturer,
+        $Language,
+        [ValidateScript({
+            if ([bool]!$(Get-CMPackage -Name $Name | Where-Object -Property Version -eq $_)) {
+                $true
+            } else {
+                Throw "A Package with the same Name AND Version already exists."
+            }            
+        })]
+        $Version,
+        $UNCSourcePath
+    )
+        New-CMPackage -Name $Name -Description $Description -Manufacturer $Manufacturer -Language 'En-US' -Version $Version -Path $UNCSourcePath -OutVariable NewCMPackageResult -ErrorVariable NewCMPackageError
+        if ($NewCMPackageResult) {
+            'Package created' | Write-Warning
+        }
+        else {
+            $NewCMPackageError
+        } 
+}
+New-CMPackage -Name 'TestPackage' -Language 'En-US' -Description 'TestPackage' -Manufacturer 'ViaMonstra' -Version '123' -UNCSourcePath '\\CM01\Sources\OSD\TestPackage'
