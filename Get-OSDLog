@@ -1,0 +1,26 @@
+function Get-OSDLog {
+    [CmdletBinding()]
+    param (
+        $LogFilePath
+    )
+    # Skipping first empty line
+    $content = (Get-Content $LogFilePath -Raw ) -split '<!\[LOG\[' | Select-Object -Skip 1
+    $int = 1
+    
+    foreach ($Entry in $content) {
+        $Time = ($Entry -split '<time="')[1]
+        $Time = ($Time -split '\.')[0]
+        
+        [array]$Things += [PSCustomObject]@{
+            Line = $int++
+            Message = ($Entry -split '\]LOG\]!>')[0]
+            Date = [datetime]("$(($Entry -split '" date="' -split '" component="' )[1]) $(($Time -split '\.' )[0])")
+            Component = ($Entry -split '" component="' -split '" context="' )[1]
+            Context = ($Entry -split '" context="' -split '" type="' )[1]
+            Type = ($Entry -split '" type="' -split '" thread="' )[1]
+            Thread = ($Entry -split '" thread="' -split '" file="' )[1]
+            File = ($Entry -split '" file="' -split '">' )[1]
+        } 
+    }
+    $things
+}
